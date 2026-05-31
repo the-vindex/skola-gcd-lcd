@@ -76,7 +76,7 @@ function formatFactMap(factMap) {
 function renderLadder(n) {
   const steps = buildLadderSteps(n);
   const rows = steps.map(([num, div]) =>
-    `<tr><td class="lnum">${num}</td><td class="ldiv">${div !== null ? div : ''}</td></tr>`
+    `<tr><td class="ldiv">${div !== null ? div : ''}</td><td class="lnum">${num}</td></tr>`
   ).join('');
   return `<table class="ladder">${rows}</table>`;
 }
