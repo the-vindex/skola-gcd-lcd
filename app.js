@@ -4,28 +4,23 @@ let correctNSN = 0;
 let solutionVisible = false;
 let selectedCount = 2;
 
-// Precompute all 17-smooth numbers in [2, 1000]
 const SMOOTH_PRIMES = [2, 3, 5, 7, 11, 13, 17];
-const SMOOTH_NUMBERS = (() => {
-  const nums = new Set([1]);
-  for (const p of SMOOTH_PRIMES) {
-    for (const n of [...nums]) {
-      let m = n * p;
-      while (m <= 1000) {
-        nums.add(m);
-        m *= p;
-      }
-    }
-  }
-  return [...nums].filter(n => n >= 2).sort((a, b) => a - b);
-})();
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function isSmooth(n) {
+  for (const p of SMOOTH_PRIMES) {
+    while (n % p === 0) n = Math.floor(n / p);
+  }
+  return n === 1;
+}
+
 function randomSmooth() {
-  return SMOOTH_NUMBERS[randomInt(0, SMOOTH_NUMBERS.length - 1)];
+  let n;
+  do { n = randomInt(2, 1000); } while (!isSmooth(n));
+  return n;
 }
 
 function gcd(a, b) {
