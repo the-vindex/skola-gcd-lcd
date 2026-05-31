@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Procvičování NSD a NSN</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Procvičování NSD a NSN</h1>
+
+    <div class="task-area">
+      <p class="task-label">Najdi NSD a NSN čísel:</p>
+      <p class="task-numbers" id="task-numbers"></p>
+    </div>
+
+    <div class="inputs">
+      <label>NSD: <input type="number" id="input-nsd" min="1" placeholder="?"></label>
+      <label>NSN: <input type="number" id="input-nsn" min="1" placeholder="?"></label>
+    </div>
+
+    <div class="buttons">
+      <button id="btn-check" onclick="checkAnswer()">Zkontrolovat</button>
+      <button id="btn-solution" onclick="toggleSolution()">Zobrazit řešení</button>
+      <button id="btn-new" onclick="newTask()">Nové příklady</button>
+    </div>
+
+    <p class="feedback" id="feedback"></p>
+
+    <div class="solution" id="solution" hidden>
+      <h2>Řešení</h2>
+      <div id="solution-content"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
