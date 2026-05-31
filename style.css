@@ -26,6 +26,47 @@ h1 {
   color: #1a1a2e;
 }
 
+.settings-area {
+  margin-bottom: 1.25rem;
+}
+
+.count-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.count-buttons {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.count-btn {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: #e5e7eb;
+  color: #374151;
+  border-radius: 4px;
+}
+
+.count-btn:hover {
+  background: #d1d5db;
+}
+
+.count-btn.active {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.count-btn.active:hover {
+  background: #2563eb;
+}
+
 .task-area {
   margin-bottom: 1.5rem;
 }

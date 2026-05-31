@@ -2,9 +2,30 @@ let currentNums = [];
 let correctNSD = 0;
 let correctNSN = 0;
 let solutionVisible = false;
+let selectedCount = 2;
+
+// Precompute all 17-smooth numbers in [2, 1000]
+const SMOOTH_PRIMES = [2, 3, 5, 7, 11, 13, 17];
+const SMOOTH_NUMBERS = (() => {
+  const nums = new Set([1]);
+  for (const p of SMOOTH_PRIMES) {
+    for (const n of [...nums]) {
+      let m = n * p;
+      while (m <= 1000) {
+        nums.add(m);
+        m *= p;
+      }
+    }
+  }
+  return [...nums].filter(n => n >= 2).sort((a, b) => a - b);
+})();
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomSmooth() {
+  return SMOOTH_NUMBERS[randomInt(0, SMOOTH_NUMBERS.length - 1)];
 }
 
 function gcd(a, b) {
@@ -68,11 +89,8 @@ function renderLadder(n) {
 function renderSolution(nums) {
   const factMaps = nums.map(n => primeFactorization(n));
 
-  // Side-by-side ladders
   const laddersHtml = nums.map(n => renderLadder(n)).join('');
 
-  // Factorization lines aligned in a table
-  const maxNumWidth = Math.max(...nums.map(n => String(n).length));
   const factLines = nums.map((n, i) =>
     `<tr>
       <td class="fn">${n}</td>
@@ -81,22 +99,15 @@ function renderSolution(nums) {
     </tr>`
   ).join('');
 
-  // Collect all primes sorted
   const allPrimes = [...new Set(factMaps.flatMap(m => [...m.keys()]))].sort((a, b) => a - b);
 
-  // NSD: primes common to all, minimum exponent
   const nsdParts = [];
   for (const p of allPrimes) {
-    const exps = factMaps.map(m => m.get(p) || 0);
-    const minExp = Math.min(...exps);
+    const minExp = Math.min(...factMaps.map(m => m.get(p) || 0));
     if (minExp > 0) nsdParts.push([p, minExp]);
   }
 
-  // NSN: all primes, maximum exponent
-  const nsnParts = allPrimes.map(p => {
-    const maxExp = Math.max(...factMaps.map(m => m.get(p) || 0));
-    return [p, maxExp];
-  });
+  const nsnParts = allPrimes.map(p => [p, Math.max(...factMaps.map(m => m.get(p) || 0))]);
 
   const fmtParts = parts =>
     parts.map(([p, e]) => e === 1 ? String(p) : `${p}<sup>${e}</sup>`).join(' &middot; ');
@@ -114,9 +125,16 @@ function renderSolution(nums) {
   `;
 }
 
+function setCount(n) {
+  selectedCount = n;
+  document.querySelectorAll('.count-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i + 2 === n);
+  });
+  newTask();
+}
+
 function newTask() {
-  const count = randomInt(2, 4);
-  currentNums = Array.from({ length: count }, () => randomInt(2, 1000));
+  currentNums = Array.from({ length: selectedCount }, () => randomSmooth());
   correctNSD = gcdAll(currentNums);
   correctNSN = lcmAll(currentNums);
 
@@ -168,7 +186,6 @@ function toggleSolution() {
   }
 }
 
-// Allow Enter key to check answer
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter') checkAnswer();
 });
